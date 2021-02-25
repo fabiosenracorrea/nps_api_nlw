@@ -1,15 +1,15 @@
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('users')
-class User {
+@Entity('surveys')
+class Survey {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar')
-  name: string;
+  title: string;
 
   @Column('varchar')
-  email: string;
+  description: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -18,4 +18,4 @@ class User {
   updated_at: Date;
 }
 
-export default User;
+export default Survey;
