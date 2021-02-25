@@ -18,6 +18,12 @@ class SurveyRepository implements iSurveyRepository {
 
     return survey;
   }
+
+  async listSurveys() {
+    const surveys = await this.repository.find();
+
+    return surveys;
+  }
 }
 
 export default SurveyRepository;
