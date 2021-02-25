@@ -20,7 +20,6 @@ class createSurveysTable1614213798198 implements MigrationInterface {
           {
             name: 'description',
             type: 'varchar',
-            isUnique: true,
           },
           {
             name: 'created_at',
