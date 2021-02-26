@@ -24,6 +24,12 @@ class SurveyRepository implements iSurveyRepository {
 
     return surveys;
   }
+
+  async findById(survey_id: string): Promise<Survey | undefined> {
+    const survey = await this.repository.findOne(survey_id);
+
+    return survey;
+  }
 }
 
 export default SurveyRepository;
