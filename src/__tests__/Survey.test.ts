@@ -17,8 +17,8 @@ describe('Surveys', () => {
   });
 
   afterAll(async () => {
-    await (await connection).undoLastMigration();
-    await (await connection).undoLastMigration();
+    await (await connection).dropDatabase();
+    await (await connection).close();
   });
 
   it('should create a survey when correct information is provided', async () => {

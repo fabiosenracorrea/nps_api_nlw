@@ -16,8 +16,8 @@ describe('Users', () => {
   });
 
   afterAll(async () => {
-    await (await connection).undoLastMigration();
-    await (await connection).undoLastMigration();
+    await (await connection).dropDatabase();
+    await (await connection).close();
   });
 
   it('should create a user when correct information is provided', async () => {
