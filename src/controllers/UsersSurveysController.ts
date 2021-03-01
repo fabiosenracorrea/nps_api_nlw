@@ -43,13 +43,21 @@ class SurveyController {
       throw new AppError('Invalid Id provided');
     }
 
+    const ratingAsNumber = Number(rating);
+    const ratingIsOfValidRange =
+      ratingAsNumber >= 1 && ratingAsNumber <= 10 && Number.isInteger(ratingAsNumber);
+
+    if (!ratingIsOfValidRange) {
+      throw new AppError('Invalid rating provided');
+    }
+
     const usersSurveysRepository = new UsersSurveysRepository();
 
     const updateSurveyRating = new UpdateSurveyRatingService(usersSurveysRepository);
 
     const infoToUpdate = {
-      user_survey_id: id,
-      value: Number(rating),
+      user_survey_id: String(id),
+      value: ratingAsNumber,
     };
 
     const updatedSurvey = await updateSurveyRating.execute(infoToUpdate);

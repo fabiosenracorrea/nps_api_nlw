@@ -1,9 +1,10 @@
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, Not, IsNull } from 'typeorm';
 
 import UserSurvey from '../../models/UserSurvey';
 import iUsersSurveysRepository from '../definitions/iUsersSurveysRepository';
 import { CreateUserSurvey, FindUserSurvey } from '../../../dtos/createUserSurveyDTO';
 import { UpdateUserSurveyDTO } from '../../../dtos/updateUserSurveyDTO';
+import User from '../../models/User';
 
 class UsersSurveysRepository implements iUsersSurveysRepository {
   repository: Repository<UserSurvey>;
@@ -43,11 +44,19 @@ class UsersSurveysRepository implements iUsersSurveysRepository {
 
   async findByUserAndSurveyId({ survey_id, user_id }: FindUserSurvey): Promise<UserSurvey | undefined> {
     const userSurvey = await this.repository.findOne({
-      where: [{ user_id }, { survey_id }, { value: null }],
-      relations: ['users', 'surveys'],
+      where: { user_id, survey_id },
+      relations: ['user', 'survey'],
     });
 
     return userSurvey;
+  }
+
+  async findAllSurveyAnswers(survey_id: string): Promise<UserSurvey[]> {
+    const userSurveys = await this.repository.find({
+      survey_id,
+    });
+
+    return userSurveys;
   }
 }
 

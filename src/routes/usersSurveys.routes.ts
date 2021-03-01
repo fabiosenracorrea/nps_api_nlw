@@ -7,7 +7,7 @@ const userSurveysRoutes = Router();
 
 const usersSurveysController = new UsersSurveysController();
 
+userSurveysRoutes.get('/answer/:rating', usersSurveysController.update);
 userSurveysRoutes.post('/', sendMailInfoChecker, usersSurveysController.create);
-userSurveysRoutes.post('/answer/:rating', usersSurveysController.update);
 
 export default userSurveysRoutes;

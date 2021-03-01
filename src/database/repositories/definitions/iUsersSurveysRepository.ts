@@ -8,6 +8,7 @@ interface iUsersSurveysRepository {
   findById(survey_id: string): Promise<UserSurvey | undefined>;
   findByUserAndSurveyId(findInfo: FindUserSurvey): Promise<UserSurvey | undefined>;
   updateRating(updateInfo: UpdateUserSurveyDTO): Promise<UserSurvey>;
+  findAllSurveyAnswers(survey_id: string): Promise<UserSurvey[]>;
 }
 
 export default iUsersSurveysRepository;

@@ -60,7 +60,7 @@ class SendMailService {
       name: user.name,
       description: survey.description,
       title: survey.title,
-      link: process.env.BASE_MAIL_URL,
+      baseLink: process.env.BASE_MAIL_URL,
       users_surveys_id: surveyUserExists ? surveyUserExists.id : null,
     };
 
