@@ -1,10 +1,13 @@
 import { Request, Response } from 'express';
 
 import SendMailService from '../services/SendMailService';
+import UpdateSurveyRatingService from '../services/UpdateSurveyRatingService';
+
 import SurveyRepository from '../database/repositories/implementations/SurveyRepository';
 import UsersSurveysRepository from '../database/repositories/implementations/UsersSurveysRepository';
 import UserRepository from '../database/repositories/implementations/UserRepository';
 import MailProvider from '../providers/SendMail';
+import AppError from '../errors/AppError';
 
 class SurveyController {
   async create(request: Request, response: Response) {
@@ -30,6 +33,28 @@ class SurveyController {
     const createdSurvey = await sendMailService.execute(emailToSend);
 
     return response.status(201).json(createdSurvey);
+  }
+
+  async update(request: Request, response: Response) {
+    const { rating } = request.params;
+    const { id } = request.query;
+
+    if (!id) {
+      throw new AppError('Invalid Id provided');
+    }
+
+    const usersSurveysRepository = new UsersSurveysRepository();
+
+    const updateSurveyRating = new UpdateSurveyRatingService(usersSurveysRepository);
+
+    const infoToUpdate = {
+      user_survey_id: id,
+      value: Number(rating),
+    };
+
+    const updatedSurvey = await updateSurveyRating.execute(infoToUpdate);
+
+    return response.status(201).json(updatedSurvey);
   }
 }
 

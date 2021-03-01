@@ -8,3 +8,8 @@ export interface SendMailServiceDTO {
   email: string;
   survey_id: string;
 }
+
+export interface FindUserSurvey {
+  user_id: string;
+  survey_id: string;
+}

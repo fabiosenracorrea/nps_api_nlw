@@ -1,5 +1,7 @@
+import path from 'path';
+
 import AppError from '../errors/AppError';
-import { SendMailServiceDTO, CreateUserSurvey } from '../dtos/createUserSurveyDTO';
+import { SendMailServiceDTO } from '../dtos/createUserSurveyDTO';
 import UserSurvey from '../database/models/UserSurvey';
 
 import UserRepository from '../database/repositories/implementations/UserRepository';
@@ -47,12 +49,41 @@ class SendMailService {
       user_id: user.id,
     };
 
+    const templatePath = path.resolve(__dirname, '..', 'views', 'emails', 'npsmail.hbs');
+
+    const surveyUserExists = await this.userSurveyRepository.findByUserAndSurveyId({
+      user_id: user.id,
+      survey_id: survey.id,
+    });
+
+    const mailVariables = {
+      name: user.name,
+      description: survey.description,
+      title: survey.title,
+      link: process.env.BASE_MAIL_URL,
+      users_surveys_id: surveyUserExists ? surveyUserExists.id : null,
+    };
+
+    if (surveyUserExists) {
+      await this.mailProvider.sendMail({
+        to: user.email,
+        subject: survey.title,
+        path: templatePath,
+        variables: mailVariables,
+      });
+
+      return surveyUserExists;
+    }
+
     const createdRelation = await this.userSurveyRepository.createRating(newSurveyToUser);
+
+    mailVariables.users_surveys_id = createdRelation.id;
 
     await this.mailProvider.sendMail({
       to: user.email,
-      body: survey.description,
       subject: survey.title,
+      path: templatePath,
+      variables: mailVariables,
     });
 
     return createdRelation;
